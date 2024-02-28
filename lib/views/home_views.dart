@@ -14,14 +14,16 @@ class _HomeViewsState extends State<HomeViews> {
       appBar: AppBar(
         title: Text("Home"),
       ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // DISPOSITIVOS
-          ],
+      body: ListView.builder(
+        itemCount: 3,
+        itemBuilder: (context, index) => Card(
+          child: ListTile(
+            title: Text('Dispositivo: '),
+            subtitle: Text('Estado: '),
+          ),
         ),
       ),
+      
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           //  ---  AGREGAR DISPOSITIVO
