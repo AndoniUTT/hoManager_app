@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homanager_app/views/device_views.dart';
+import 'package:homanager_app/views/led_view.dart';
+import 'package:homanager_app/views/registerD_views.dart';
 
 class HomeViews extends StatefulWidget {
   const HomeViews({Key? key});
@@ -13,11 +15,16 @@ class _HomeViewsState extends State<HomeViews> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home"),
+        title: Text("Inicio"),
       ),
       body: _buildListView(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context) => RegisterView()
+                ),
+              );
           //  ---  AGREGAR DISPOSITIVO
         },
         child: Icon(Icons.add),
@@ -39,7 +46,7 @@ class _HomeViewsState extends State<HomeViews> {
             onPressed: (){
               Navigator.push(
                 context, 
-                MaterialPageRoute(builder: (context) => DeviceView(index)
+                MaterialPageRoute(builder: (context) => LedView()
                 ),
               );
             },
@@ -49,4 +56,5 @@ class _HomeViewsState extends State<HomeViews> {
       },
     );
   }
+
 }
