@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:homanager_app/views/device_views.dart';
+import 'package:homanager_app/theme/app_theme.dart';
 import 'package:homanager_app/views/led_view.dart';
 import 'package:homanager_app/views/registerD_views.dart';
 
@@ -37,18 +37,23 @@ class _HomeViewsState extends State<HomeViews> {
       itemCount: 3,
       itemBuilder: (_,index) {
         return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          margin: const EdgeInsets.all(15),
+          elevation: 10,
           child: ListTile(
-          title: Text('Dispositivo: '),
-          subtitle: Text('Estado: '),
-          leading: Icon(Icons.circle),
-          trailing: IconButton(
-            icon: Icon(Icons.arrow_forward),
-            onPressed: (){
-              Navigator.push(
-                context, 
-                MaterialPageRoute(builder: (context) => LedView()
-                ),
-              );
+            title: Text('Dispositivo: '),
+            subtitle: Text('Estado: '),
+            leading: Icon(Icons.circle),
+            trailing: IconButton(
+              icon: Icon(Icons.arrow_forward),
+              onPressed: (){
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => LedView()
+                  ),
+                );
             },
           ),
         ),

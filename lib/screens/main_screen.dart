@@ -37,8 +37,8 @@ class _MainScreenState extends State<MainScreen> {
         items: [
 
           BottomNavigationBarItem(
-            icon: const Icon(Icons.rounded_corner),
-            activeIcon: const Icon(Icons.rounded_corner_outlined),
+            icon: const Icon(Icons.app_settings_alt_outlined),
+            activeIcon: const Icon(Icons.app_settings_alt),
             label: 'Configuración',
             backgroundColor: colors.tertiary,
             ),
