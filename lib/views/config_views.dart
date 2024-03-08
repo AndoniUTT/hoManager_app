@@ -24,6 +24,17 @@ class _ConfigViewsState extends State<ConfigViews> {
     );
   }
 
+  Column settings(){
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        ListTile(
+          title: Text('Configurar app'),
+        )
+      ],
+    );
+  }
+
   Row entradasCheck() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
