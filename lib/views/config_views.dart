@@ -8,15 +8,57 @@ class ConfigViews extends StatefulWidget {
 }
 
 class _ConfigViewsState extends State<ConfigViews> {
+  bool Check1 = false;
+  bool Check2 = false;
+  bool Check3 = false;
+
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("CONFIGURATION"),
+          entradasCheck(),
         ],
       ),
+    );
+  }
+
+  Row entradasCheck() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Text(
+          'Aprueba',
+        ),
+        Checkbox(
+            value: Check1,
+            onChanged: (value) {
+              setState(() {
+                Check1 = value!;
+              });
+            }),
+        Text(
+          'Aprueba 2',
+        ),
+        Checkbox(
+            value: Check2,
+            onChanged: (value) {
+              setState(() {
+                Check2 = value!;
+            });
+        }),
+        Text(
+          'Aprueba 3',
+        ),
+        Checkbox(
+            value: Check3,
+            onChanged: (value) {
+              setState(() {
+                Check3 = value!;
+            });
+        }),
+      ],
     );
   }
 }

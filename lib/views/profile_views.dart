@@ -10,13 +10,29 @@ class ProfileViews extends StatefulWidget {
 class _ProfileViewsState extends State<ProfileViews> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("PROFILE"),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: const Image(
+              image: AssetImage('assets/img/usuario.png')),
+          ),
+          Container(
+            padding: const EdgeInsets.all(10),
+            child: const Text("Andoni"),
+          ),
         ],
       ),
+    );
+  }
+
+  Widget imageWeb(){
+    return Center(
+      child: Image.network(
+        'https://www.pexels.com/es-es/foto/ilustracion-de-bola-de-plasma-414860/'
+        ),
     );
   }
 }
