@@ -35,7 +35,7 @@ class _LoginFormState extends State<LoginForm> {
       children: [
         const SizedBox(
           child: Image(
-          image: AssetImage('assets/img/logo.jpeg'),
+          image: AssetImage('assets/img/letter_logo.jpeg'),
           ),
           height: 350,
           width: 350,

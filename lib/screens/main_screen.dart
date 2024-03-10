@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:homanager_app/views/config_views.dart';
+import 'package:homanager_app/views/config_views/config_views.dart';
 import 'package:homanager_app/views/home_views.dart';
-import 'package:homanager_app/views/profile_views.dart';
+import 'package:homanager_app/views/profile_views/profile_views.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

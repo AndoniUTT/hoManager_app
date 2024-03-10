@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:homanager_app/views/led_view.dart';
-import 'package:homanager_app/views/registerD_views.dart';
+import 'package:homanager_app/views/device_views/led_view.dart';
+import 'package:homanager_app/views/device_views/registerD_views.dart';
 
 class HomeViews extends StatefulWidget {
   const HomeViews({Key? key});

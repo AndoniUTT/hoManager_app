@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:homanager_app/screens/login.dart';
+import 'package:homanager_app/screens/splash.dart';
 import 'package:homanager_app/theme/app_theme.dart';
 
 class MainApp extends StatelessWidget {
@@ -10,7 +10,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       theme: AppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
-      home: const LoginPage(),
+      home: Splash(),
     );
   }
 
