@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:homanager_app/screens/main_screen.dart';
+import 'package:homanager_app/screens/register.dart';
+import 'package:homanager_app/views/device_views/registerD_views.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -14,49 +16,55 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: LoginForm(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 350,
+              width: 350,
+              child: Image.asset('assets/img/letter_logo.jpeg'),
+            ),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextField(
+                    decoration: InputDecoration(
+                      labelText: 'Inicia sesión con tu correo o número telefónico',
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainScreen()),
+                      );
+                    },
+                    child: Text('Iniciar sesión'),
+                  ),
+                  SizedBox(height: 8.0), // Espacio entre los botones
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegisterPage()),
+                      );
+                    },
+                    child: Text(
+                      '¿No tienes una cuenta? Regístrate',
+                      style: TextStyle(
+                        color: Colors.blue, // Color del texto subrayado
+                        decoration: TextDecoration.underline, // Texto subrayado
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-    );
-  }
-}
-
-class LoginForm extends StatefulWidget {
-  @override
-  _LoginFormState createState() => _LoginFormState();
-}
-
-class _LoginFormState extends State<LoginForm> {
-  final TextEditingController _usernameController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const SizedBox(
-          child: Image(
-          image: AssetImage('assets/img/letter_logo.jpeg'),
-          ),
-          height: 350,
-          width: 350,
-        ),
-        
-        TextField(
-          controller: _usernameController,
-          decoration: InputDecoration(labelText: 'Inicia sesión con tu correo o numero telefonico'),
-        ),
-        const SizedBox(height: 16.0),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-                context, 
-                MaterialPageRoute(builder: (context) => MainScreen()
-                ),
-                );
-          },
-          child: Text('Iniciar sesión'),
-        ),
-      ],
     );
   }
 }
