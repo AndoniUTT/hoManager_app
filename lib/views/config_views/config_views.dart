@@ -1,17 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ConfigViews extends StatefulWidget {
-  const ConfigViews({super.key});
-
-  @override
-  State<ConfigViews> createState() => _ConfigViewsState();
-}
-
-class _ConfigViewsState extends State<ConfigViews> {
-  bool Check1 = false;
-  bool Check2 = false;
-  bool Check3 = false;
-
+class ConfigViews extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,60 +8,33 @@ class _ConfigViewsState extends State<ConfigViews> {
         title: Text("Configuración"),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          entradasCheck(),
+          ConfigOption(title: "Cambiar contraseña"),
+          ConfigOption(title: "Notificaciones"),
+          ConfigOption(title: "Preferencias de idioma"),
+          ConfigOption(title: "Tema de la aplicación"),
+          ConfigOption(title: "Configuración de cuenta"),
         ],
       ),
     );
   }
+}
 
-  Column settings(){
-    return const Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        ListTile(
-          title: Text('Configurar app'),
-        )
-      ],
-    );
-  }
+class ConfigOption extends StatelessWidget {
+  final String title;
 
-  Row entradasCheck() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Text(
-          'Aprueba',
-        ),
-        Checkbox(
-            value: Check1,
-            onChanged: (value) {
-              setState(() {
-                Check1 = value!;
-              });
-            }),
-        Text(
-          'Aprueba 2',
-        ),
-        Checkbox(
-            value: Check2,
-            onChanged: (value) {
-              setState(() {
-                Check2 = value!;
-            });
-        }),
-        Text(
-          'Aprueba 3',
-        ),
-        Checkbox(
-            value: Check3,
-            onChanged: (value) {
-              setState(() {
-                Check3 = value!;
-            });
-        }),
-      ],
+  const ConfigOption({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(title),
+      trailing: Icon(Icons.arrow_forward_ios),
+      onTap: () {
+        // Acción a realizar al seleccionar esta opción
+        print("Seleccionaste: $title");
+      },
     );
   }
 }
