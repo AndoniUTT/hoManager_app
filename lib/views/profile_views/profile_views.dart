@@ -10,9 +10,12 @@ class ProfileViews extends StatefulWidget {
 class _ProfileViewsState extends State<ProfileViews> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Perfil"),
+      ),
+      body: Column(
+        //mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(20),

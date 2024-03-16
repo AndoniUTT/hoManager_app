@@ -14,8 +14,11 @@ class _ConfigViewsState extends State<ConfigViews> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Configuración"),
+      ),
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           entradasCheck(),

@@ -35,7 +35,6 @@ class _MainScreenState extends State<MainScreen> {
         },
         elevation: 0,
         items: [
-
           BottomNavigationBarItem(
             icon: const Icon(Icons.app_settings_alt_outlined),
             activeIcon: const Icon(Icons.app_settings_alt),
@@ -56,6 +55,7 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Perfil',
             backgroundColor: colors.primary,
             ),
+            
           ],
         ),
     );

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-class RegisterView extends StatelessWidget {
+class RegisterView extends StatefulWidget {
   const RegisterView({Key? key});
 
+  @override
+  State<RegisterView> createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +40,15 @@ class _RegisterDeviceFormState extends State<RegisterDeviceForm> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: const SizedBox(
+              height: 120,
+              width: 120,
+              child: Image(
+                image: AssetImage('assets/img/devices.png')),
+            ),
+          ),
         TextField(
           controller: _nameController,
           decoration: InputDecoration(labelText: 'Nombre o Alias'),
@@ -72,25 +86,27 @@ class _RegisterDeviceFormState extends State<RegisterDeviceForm> {
           },
           decoration: InputDecoration(labelText: 'Habitación'),
         ),
-
         SizedBox(height: 16.0),
+        
         ElevatedButton(
-          onPressed: () {
-            // Lógica de registro del dispositivo
-            String name = _nameController.text;
-
-            // Puedes imprimir los valores para verificar
-            print('Nombre o Alias: $name');
-            print('Tipo: $_selectedType');
-            print('Habitación: $_selectedRoom');
-
-            // Limpiar los campos
-            _nameController.clear();
-
-          },
-          child: Text('Registrar Dispositivo'),
+          onPressed: () => showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('¿Desea modificar los datos?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
         ),
-
+      ),
+      child: Text('Guardar'),
+        ),
       ],
     );
   }
