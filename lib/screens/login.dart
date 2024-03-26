@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homanager_app/screens/main_screen.dart';
 import 'package:homanager_app/screens/register.dart';
-import 'package:homanager_app/views/device_views/registerD_views.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key});
@@ -43,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     child: Text('Iniciar sesión'),
                   ),
-                  SizedBox(height: 8.0), // Espacio entre los botones
+                  SizedBox(height: 8.0), 
                   TextButton(
                     onPressed: () {
                       Navigator.push(
@@ -54,8 +53,8 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(
                       '¿No tienes una cuenta? Regístrate',
                       style: TextStyle(
-                        color: Colors.blue, // Color del texto subrayado
-                        decoration: TextDecoration.underline, // Texto subrayado
+                        color: Colors.blue, 
+                        decoration: TextDecoration.underline, 
                       ),
                     ),
                   ),
