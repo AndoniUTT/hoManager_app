@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "892626383124",
+    "project_id": "homanager-app",
+    "storage_bucket": "homanager-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892626383124:android:c82bc0efdc5e1c8e291201",
+        "android_client_info": {
+          "package_name": "com.example.homanager_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiJflnv_E4c5uVciPFY_pLG_xjWdkQG2I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
