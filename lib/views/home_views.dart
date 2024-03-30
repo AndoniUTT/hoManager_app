@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homanager_app/views/device_views/registerD_views.dart';
+import 'package:homanager_app/services/firebase_services.dart'; 
 
 class HomeViews extends StatefulWidget {
   const HomeViews({Key? key});
@@ -17,30 +18,53 @@ class _HomeViewsState extends State<HomeViews> {
       ),
       body: _buildListView(context),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context, 
+        onPressed: () async {
+          await Navigator.push(
+            context,
             MaterialPageRoute(builder: (context) => RegisterView()),
           );
+          setState(() {});
         },
         child: Icon(Icons.add),
       ),
     );
   }
 
-  ListView _buildListView(BuildContext context){
-    return ListView.builder(
-      itemCount: 3,
-      itemBuilder: (_, index) {
-        return SwitchCard(
-          title: 'Dispositivo ${index + 1}',
-          value: false, // Aquí deberías tener una variable que controle el estado del interruptor
-          onChanged: (newValue) {
-            // Aquí deberías actualizar el estado del interruptor
-            // probablemente usando setState en un StatefulWidget
-            print('Nuevo valor del interruptor: $newValue');
-          },
-        );
+  Future<List<Map<String, dynamic>>> _fetchDeviceList() async {
+    return getDevices();
+  }
+
+  Widget _buildListView(BuildContext context) {
+    return FutureBuilder(
+      future: _fetchDeviceList(),
+      builder: (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('Error al cargar los dispositivos: ${snapshot.error}'),
+          );
+        } else {
+          final devices = snapshot.data!;
+          return ListView.builder(
+            itemCount: devices.length,
+            itemBuilder: (context, index) {
+              final device = devices[index];
+              return SwitchCard(
+                title: device['name'] ?? 'Dispositivo ${index + 1}',
+                value: device['status'] ?? false,
+                onChanged: (newValue) async {
+                  await updateDeviceStatus(device['id'], newValue);
+                  setState(() {
+                    devices[index]['status'] = newValue;
+                  });
+                },
+              );
+            },
+          );
+        }
       },
     );
   }
@@ -67,7 +91,7 @@ class SwitchCard extends StatelessWidget {
       elevation: 10,
       child: ListTile(
         title: Text(title),
-        subtitle: Text('Estado: '),
+        subtitle: Text('Estado: ${value ? 'Encendido' : 'Apagado'}'),
         leading: Icon(Icons.circle),
         trailing: Switch(
           value: value,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homanager_app/services/firebase_services.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key});
@@ -88,25 +89,32 @@ class _RegisterDeviceFormState extends State<RegisterDeviceForm> {
         ),
         SizedBox(height: 16.0),
         
-        ElevatedButton(
-          onPressed: () => showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('¿Desea modificar los datos?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'Cancel'),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
-            ),
-          ],
+      ElevatedButton(
+        onPressed: () => showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('¿Desea modificar los datos?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  await addDevice(
+                    _nameController.text,
+                    _selectedType,
+                    _selectedRoom,
+                  );
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
         ),
+        child: Text('Guardar'),
       ),
-      child: Text('Guardar'),
-        ),
       ],
     );
   }
