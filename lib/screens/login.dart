@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homanager_app/screens/main_screen.dart';
 import 'package:homanager_app/screens/register.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key});
@@ -10,6 +11,72 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
+  bool _isPasswordVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _signInWithEmailAndPassword() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      _showAlert('Error', 'Por favor, complete todos los campos.');
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainScreen()),
+      );
+      
+    } on FirebaseAuthException catch  (e) {
+      if (e.code == 'user-not-found') {
+        _showAlert('Error', 'No se encontró ningún usuario con ese correo electrónico.');
+      } else if (e.code == 'wrong-password') {
+        _showAlert('Error', 'Contraseña incorrecta.');
+      }
+    }
+  }
+
+  void _showAlert(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,21 +95,35 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextField(
+                    controller: _emailController,
                     decoration: InputDecoration(
-                      labelText: 'Inicia sesión con tu correo o número telefónico',
+                      labelText: 'Correo electrónico',
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  TextField(
+                    controller: _passwordController,
+                    obscureText: !_isPasswordVisible,
+                    decoration: InputDecoration(
+                      labelText: 'Contraseña',
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                      ),
                     ),
                   ),
                   SizedBox(height: 16.0),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MainScreen()),
-                      );
-                    },
+                    onPressed: _signInWithEmailAndPassword,
                     child: Text('Iniciar sesión'),
                   ),
-                  SizedBox(height: 8.0), 
+                  SizedBox(height: 8.0),
                   TextButton(
                     onPressed: () {
                       Navigator.push(
@@ -53,8 +134,8 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(
                       '¿No tienes una cuenta? Regístrate',
                       style: TextStyle(
-                        color: Colors.blue, 
-                        decoration: TextDecoration.underline, 
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
                       ),
                     ),
                   ),

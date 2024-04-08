@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:homanager_app/firebase_auth/firebase_auth_service.dart';
+import 'package:homanager_app/screens/login.dart';
 import 'package:homanager_app/screens/main_screen.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -116,7 +117,7 @@ class _RegisterFormState extends State<RegisterForm> {
         print('Usuario creado correctamente');
         Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MainScreen()),
+            MaterialPageRoute(builder: (context) => LoginPage()),
         );
       }else{
         print('Error:detectado');

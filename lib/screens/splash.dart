@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:homanager_app/screens/login copy.dart';
+import 'package:homanager_app/screens/login.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key});
