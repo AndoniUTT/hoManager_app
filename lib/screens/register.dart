@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:homanager_app/firebase_auth/firebase_auth_service.dart';
 import 'package:homanager_app/screens/main_screen.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -23,11 +25,21 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
+
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _locationController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,21 +72,14 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
           SizedBox(height: 16),
           TextFormField(
-            controller: _phoneController,
+            controller: _passwordController,
             decoration: InputDecoration(
-              labelText: 'Número telefónico',
-            ),
-          ),
-          SizedBox(height: 16),
-          TextFormField(
-            controller: _locationController,
-            decoration: InputDecoration(
-              labelText: 'Localidad',
+              labelText: 'Contraseña',
             ),
           ),
           SizedBox(height: 16),
           ElevatedButton(
-            onPressed: _isLoading ? null : _handleRegistration,
+            onPressed: _isLoading ? null : _signUp,
             child: _isLoading
                 ? CircularProgressIndicator() // Muestra un indicador de carga si isLoading es true
                 : Text('Registrarse'),
@@ -85,23 +90,36 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   void _handleRegistration() {
-    // Muestra la alerta con el indicador de carga
     setState(() {
       _isLoading = true;
     });
 
-    // Simula un retraso de 3 segundos antes de navegar a otra pantalla
     Timer(Duration(seconds: 4), () {
-      // Oculta la alerta
       setState(() {
         _isLoading = false;
       });
 
-      // Navega a otra pantalla
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => MainScreen()),
       );
     });
   }
+  void _signUp() async {
+      String username = _usernameController.text;
+      String email = _emailController.text;
+      String password= _passwordController.text;
+
+      User? user = await _auth.signInUpEmailAndPassword(email, password);
+
+      if (user!= null){
+        print('Usuario creado correctamente');
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MainScreen()),
+        );
+      }else{
+        print('Error:detectado');
+      }
+    }
 }

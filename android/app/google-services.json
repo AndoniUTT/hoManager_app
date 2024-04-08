@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "892626383124",
+    "firebase_url": "https://homanager-app-default-rtdb.firebaseio.com",
     "project_id": "homanager-app",
     "storage_bucket": "homanager-app.appspot.com"
   },
