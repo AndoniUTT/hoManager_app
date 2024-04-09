@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:homanager_app/views/device_views/registerD_views.dart';
 import 'package:homanager_app/services/firebase_services.dart'; 
 
@@ -10,6 +11,8 @@ class HomeViews extends StatefulWidget {
 }
 
 class _HomeViewsState extends State<HomeViews> {
+  final DatabaseReference _ledsRef = FirebaseDatabase.instance.reference().child('LED'); // Referencia a los nodos de los LEDs
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,13 +57,8 @@ class _HomeViewsState extends State<HomeViews> {
               final device = devices[index];
               return SwitchCard(
                 title: device['name'] ?? 'Dispositivo ${index + 1}',
-                value: device['status'] ?? false,
-                onChanged: (newValue) async {
-                  await updateDeviceStatus(device['id'], newValue);
-                  setState(() {
-                    devices[index]['status'] = newValue;
-                  });
-                },
+                // Instancia del nodo del LED correspondiente en la base de datos en tiempo real
+                ledRef: _ledsRef.child('digital${index + 1}'), // Cambiar 'digital${index + 1}' según la estructura de tu base de datos
               );
             },
           );
@@ -70,16 +68,37 @@ class _HomeViewsState extends State<HomeViews> {
   }
 }
 
-class SwitchCard extends StatelessWidget {
+class SwitchCard extends StatefulWidget {
   final String title;
-  final bool value;
-  final ValueChanged<bool>? onChanged;
+  final DatabaseReference ledRef; // Instancia del nodo del LED en la base de datos en tiempo real
 
   SwitchCard({
     required this.title,
-    required this.value,
-    this.onChanged,
+    required this.ledRef,
   });
+
+  @override
+  _SwitchCardState createState() => _SwitchCardState();
+}
+
+class _SwitchCardState extends State<SwitchCard> {
+  late bool _value;
+
+  @override
+  void initState() {
+    super.initState();
+    // Obtener el valor inicial del interruptor desde la base de datos en tiempo real
+    widget.ledRef.onValue.listen((event) {
+      setState(() {
+        _value = (event.snapshot.value ?? false) as bool; // Conversión explícita a bool
+      });
+    });
+  }
+
+  // Método para cambiar el estado del LED en la base de datos en tiempo real
+  void _toggleLed(bool newValue) {
+    widget.ledRef.set(newValue);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,12 +109,12 @@ class SwitchCard extends StatelessWidget {
       margin: const EdgeInsets.all(15),
       elevation: 10,
       child: ListTile(
-        title: Text(title),
-        subtitle: Text('Estado: ${value ? 'Encendido' : 'Apagado'}'),
+        title: Text(widget.title),
+        subtitle: Text('Estado: ${_value ? 'Encendido' : 'Apagado'}'),
         leading: Icon(Icons.circle),
         trailing: Switch(
-          value: value,
-          onChanged: onChanged,
+          value: _value,
+          onChanged: _toggleLed, // Llama al método para cambiar el estado del LED
         ),
       ),
     );

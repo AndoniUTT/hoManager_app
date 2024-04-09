@@ -51,6 +51,7 @@ class DefaultFirebaseOptions {
     authDomain: 'homanager-app.firebaseapp.com',
     storageBucket: 'homanager-app.appspot.com',
     measurementId: 'G-S70SWMKJ45',
+    databaseURL: 'https://homanager-app-default-rtdb.firebaseio.com/'
   );
 
   static const FirebaseOptions android = FirebaseOptions(
