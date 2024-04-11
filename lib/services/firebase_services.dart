@@ -15,13 +15,34 @@ Future<List<Map<String, dynamic>>> getDevices() async {
 Future<void> addDevice(String name, String type, String room) async {
   await db.collection("devices").add({
     "name": name,
-    "type": type,
+    "type": type, 
     "room": room,
   });
+}
+
+Future<Map<String, dynamic>> getDeviceDetails(String deviceId) async {
+  DocumentSnapshot document = await db.collection('devices').doc(deviceId).get();
+  return document.data() as Map<String, dynamic>;
 }
 
 Future<void> updateDeviceStatus(String deviceId, bool status) async {
     await db.collection("devices").doc(deviceId).update({
       "status": status,
     });
+}
+
+Future<Map<String, dynamic>> getAutomationSettings() async {
+  try {
+    DocumentSnapshot document = await db.collection('automationSettings').doc('default').get();
+    if (document.exists) {
+      print("Se obtuvo documento");
+      return document.data() as Map<String, dynamic>;
+    } else {
+      print("NO SE OBTUVO DOCUMENTO");
+      return {};
+    }
+  } catch (e) {
+    print('Error al obtener las configuraciones de automatización: $e');
+    throw e; 
+  }
 }

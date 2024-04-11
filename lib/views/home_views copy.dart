@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:homanager_app/views/device_views/program_lights.dart';
-import 'package:homanager_app/services/firebase_services.dart';
+import 'package:homanager_app/services/firebase_services.dart'; // Importa FirebaseServices
 import 'package:homanager_app/views/device_views/device_details.dart';
 
 class HomeViews extends StatefulWidget {
@@ -13,6 +14,76 @@ class HomeViews extends StatefulWidget {
 
 class _HomeViewsState extends State<HomeViews> {
   final DatabaseReference _ledsRef = FirebaseDatabase.instance.reference().child('LED'); // Referencia a los nodos de los LEDs
+
+  @override
+  void initState() {
+    super.initState();
+    _activateAutomation();
+  }
+
+  Future<void> _activateAutomation() async {
+  try {
+    Map<String, dynamic> automationSettings = await getAutomationSettings();
+    print('Configuraciones de automatización obtenidas: $automationSettings');
+
+    // Verificar si es hora de apagar las luces
+    if (_isTimeToTurnOffLights(automationSettings)) {
+      print('Es hora de apagar las luces');
+      // Obtener la lista de dispositivos
+      List<Map<String, dynamic>> devices = await getDevices();
+      print('Dispositivos obtenidos: $devices');
+
+      // Apagar las luces para cada dispositivo
+      for (Map<String, dynamic> device in devices) {
+        String deviceId = device['id']; // Asegúrate de tener el campo 'id' en tu documento de dispositivo
+        print('Apagando dispositivo $deviceId');
+        await updateDeviceStatus(deviceId, false); // Apagar el dispositivo
+      }
+
+      // Apagar todas las luces en la base de datos en tiempo real
+      for (int i = 1; i <= 8; i++) {
+        print('Apagando luz digital $i');
+        await _ledsRef.child('digital$i').set(false);
+      }
+    }
+  } catch (e) {
+    print('Error al activar la automatización: $e');
+  }
+}
+
+  bool _isTimeToTurnOffLights(Map<String, dynamic> automationSettings) {
+  // Obtener la hora actual
+  DateTime now = DateTime.now();
+
+  print('Hora actual: $now');
+
+  // Obtener la hora de apagado definida en las configuraciones de automatización
+  Timestamp turnOffTimestamp = automationSettings['turnOffTime'];
+  DateTime turnOffTime = turnOffTimestamp.toDate();
+
+  print('Hora de apagado definida en configuraciones: $turnOffTime');
+
+  // Obtener los días seleccionados para la automatización
+  List<bool> selectedDays = List<bool>.from(automationSettings['selectedDays']);
+  
+  // Obtener el día de la semana actual (lunes = 1, martes = 2, ..., domingo = 7)
+  int currentWeekday = now.weekday;
+
+  print('Día de la semana actual: $currentWeekday');
+  print('¿Día de la semana actual seleccionado en configuraciones? ${selectedDays[currentWeekday - 1]}');
+
+  // Verificar si es el día correcto y si es hora de apagar las luces
+  if (selectedDays[currentWeekday - 1] &&
+      now.hour == turnOffTime.hour &&
+      now.minute == turnOffTime.minute) {
+    print('Es hora de apagar las luces');
+    return true; // Es hora de apagar las luces
+  } else {
+    print('No es hora de apagar las luces');
+    return false; // No es hora de apagar las luces
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +131,12 @@ class _HomeViewsState extends State<HomeViews> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => DeviceDetailsScreen(deviceId: 'digital${index + 1}')), // Pasar el ID del dispositivo a la pantalla de detalles
+                    MaterialPageRoute(builder: (context) => DeviceDetailsScreen(deviceId: 'digital${index + 1}')), 
                   );
                 },
                 child: SwitchCard(
                   title: device['name'] ?? 'Dispositivo ${index + 1}',
-                  // Instancia del nodo del LED correspondiente en la base de datos en tiempo real
-                  ledRef: _ledsRef.child('digital${index + 1}'), // Cambiar 'digital${index + 1}' según la estructura de tu base de datos
+                  ledRef: _ledsRef.child('digital${index + 1}'), 
                 ),
               );
             },
@@ -79,7 +149,7 @@ class _HomeViewsState extends State<HomeViews> {
 
 class SwitchCard extends StatefulWidget {
   final String title;
-  final DatabaseReference ledRef; // Instancia del nodo del LED en la base de datos en tiempo real
+  final DatabaseReference ledRef; // Instancia del LED en la base de datos en tiempo real
 
   SwitchCard({
     required this.title,
@@ -96,15 +166,16 @@ class _SwitchCardState extends State<SwitchCard> {
   @override
   void initState() {
     super.initState();
-    // Obtener el valor inicial del interruptor desde la base de datos en tiempo real
+    _value = false; 
     widget.ledRef.onValue.listen((event) {
-      setState(() {
-        _value = (event.snapshot.value ?? false) as bool; // Conversión explícita a bool
-      });
+      if (mounted) { 
+        setState(() {
+          _value = (event.snapshot.value ?? false) as bool; 
+        });
+      }
     });
   }
 
-  // Método para cambiar el estado del LED en la base de datos en tiempo real
   void _toggleLed(bool newValue) {
     widget.ledRef.set(newValue);
   }
@@ -123,7 +194,7 @@ class _SwitchCardState extends State<SwitchCard> {
         leading: Icon(Icons.circle),
         trailing: Switch(
           value: _value,
-          onChanged: _toggleLed, // Llama al método para cambiar el estado del LED
+          onChanged: _toggleLed, 
         ),
       ),
     );
